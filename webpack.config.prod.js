@@ -4,56 +4,54 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    context: path.join(__dirname, './front'),
-    entry: {
-        kernel: ['kernel'],
-    },
+    context: path.join(__dirname, './src'),
+    entry: [
+        'bootstrap-loader',
+        'font-awesome/scss/font-awesome.scss',
+        './app.js',
+    ],
     output: {
-        path: path.join(__dirname, './web/built'),
+        path: path.join(__dirname, './built'),
         publicPath: '/built/',
         filename: '[hash].[name].js',
         chunkFilename: '[chunkhash].[name].js',
     },
+    resolve: {
+        extensions: ['*', '.js'],
+    },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.(html|gif|png|jpg|jpeg|ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                loader: 'file-loader',
-                query: { name: '[name].[ext]' },
-            },
-            {
-                test: /\.scss$/,
-                loaders: ExtractTextPlugin.extract({
-                    fallbackLoader: 'style-loader',
-                    loader: 'css-loader!sass-loader',
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader',
                 }),
             },
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loaders: [
-                    {
-                        loader: 'babel-loader',
-                        query: { cacheDirectory: true },
-                    },
-                ],
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader!sass-loader',
+                }),
+            },
+            {
+                test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: 'url-loader',
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+                use: 'file-loader',
+            },
+            {
+                test: /bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/,
+                use: 'imports-loader?jQuery=jquery',
             },
         ],
     },
-    resolve: {
-        extensions: ['.js'],
-        modules: [
-            path.resolve('./front'),
-            'node_modules',
-        ],
-        alias: {
-            react: path.resolve(__dirname, 'node_modules/react'),
-            'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
-        },
-    },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': { NODE_ENV: JSON.stringify('production') },
+            'process.env': { NODE_ENV: JSON.stringify('development') },
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: { warnings: false },
@@ -65,17 +63,13 @@ module.exports = {
             debug: false,
         }),
         new ExtractTextPlugin({
-            filename: '[hash].app.css',
+            filename: '[hash].main.css',
             allChunks: true,
         }),
-
-        function symfonyAssetsVersion() {
-            this.plugin('done', (stats) => {
-                fs.writeFile(
-                    path.join(__dirname, 'app/config', 'assets_version.yml'),
-                    `parameters:\n    assets_hash: ${stats.hash}\n`
-                );
-            });
-        },
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
+        }),
     ],
 };

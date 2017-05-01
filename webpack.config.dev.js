@@ -7,7 +7,6 @@ module.exports = {
     entry: [
         'bootstrap-loader',
         'font-awesome/scss/font-awesome.scss',
-        './app.scss',
         './app.js',
     ],
     output: {
