@@ -1,11 +1,12 @@
 
 body {
-    background: #d6ecd8;
+    background: url('/images/background.jpg') #8fb05b no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
 }
 
 .header {
-    background: #fff;
-    padding: 20px 0;
+    padding: 10px 0;
 
     @media (max-width: $screen-md-min) {
         text-align: center;
@@ -36,7 +37,7 @@ body {
     }
 
     &__logo {
-        height: 121px;
+        height: 100px;
 
         @media (max-width: $screen-sm-min) {
             height: 70px;
@@ -44,8 +45,9 @@ body {
     }
 
     &__title {
-        margin-top: 0;
+        margin-top: -10px;
         font-size: 35px;
+        color: $brand-success;
     }
 
     &__subtitle {
@@ -54,9 +56,34 @@ body {
     }
 }
 
+.navbar {
+    font-size: 14px;
+}
+
 .topnav {
+    margin-bottom: 0;
+
     i {
         margin-right: 5px;
+    }
+}
+
+.subnav {
+    background: rgba(255, 255, 255, 0.2);
+
+    .navbar-nav > li {
+        & > a {
+            background: transparent;
+        }
+
+        & > a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        &.active {
+            background: rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
     }
 }
 
@@ -65,9 +92,11 @@ body {
 }
 
 .footer {
-    margin: 40px 0;
+    margin: 20px auto;
+    padding: 10px 20px;
     font-size: 12px;
-    color: $gray;
+    color: $gray-dark;
+    background: rgba(255, 255, 255, 0.3);
 
     &__left {
         text-align: left;
