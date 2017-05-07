@@ -1,5 +1,5 @@
 .content {
-    background: #f6f7ec;
+    background: rgba(246, 247, 236, 0.9);
     padding: 20px;
 
     &__title, p, h1, h2, h3, h4, h5, h6 {
@@ -14,5 +14,9 @@
 
     .btn {
         margin-bottom: 5px;
+    }
+
+    a:not(.btn) {
+        color: lighten($brand-primary, 10%);
     }
 }
